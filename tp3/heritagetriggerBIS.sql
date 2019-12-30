@@ -1,4 +1,4 @@
-CREATE OR REPLACE TRIGGER check_id_eleve BEFORE INSERT OR UPDATE ON ELEVES FOR EACH ROW
+CREATE OR REPLACE TRIGGER check_id_professeur BEFORE INSERT OR UPDATE ON PROFESSEURS FOR EACH ROW
     DECLARE
         v_test_eleve                ELEVES%rowtype;
         v_test_professeur           PROFESSEURS%rowtype;
@@ -8,6 +8,7 @@ CREATE OR REPLACE TRIGGER check_id_eleve BEFORE INSERT OR UPDATE ON ELEVES FOR E
         select * into v_test_professeur from PROFESSEURS where NUM_PERSONNE = :NEW.NUM_PERSONNE;
         if v_test_eleve is not null or  v_test_professeur is not null then
             raise cont_same_id;
+
         end if;
     EXCEPTION
         WHEN cont_same_id THEN
