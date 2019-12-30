@@ -1,0 +1,15 @@
+select lib_service,nom,prenom from revision.employer natural join revision.service where lib_service= 'montage';
+select lib_service,nom,prenom from revision.employer natural join revision.service where num_service= 1101 or num_service_sup=1101;
+select num_service from revision.service where (select count(*) as occ from revision.employer where employer.num_service=service.num_service) > 1;
+select lib_service from revision.service where (select count(*) as occ from revision.employer where employer.num_service=service.num_service) = 0;
+select lib_service from revision.service where (select count(*) as occ from revision.employer where employer.num_service=service.num_service) >= 1;
+select *,(select sum(date_fin_conge-date_debut_conge) from conge_pris where conge_pris.num_employer = employer.num_employer) as nbConge from employer;
+select *,(select sum(nbjour) from droit_conge where employer.num_employer=droit_conge.num_employer) as total from employer where (select sum(nbjour) from droit_conge where employer.num_employer=droit_conge.num_employer)>15
+select * from employer natural join conge_pris where date_debut_conge between '2019-10-01' and '2019-10-15' or date_fin_conge between '2019-10-01' and '2019-10-15';
+select * from employer where num_employer not in (select num_employer from droit_conge) ;
+select * from employer where (select count(*) from droit_conge where employer.num_employer = droit_conge.num_employer)=(select count(*) from nature_conge)
+select nom,prenom from employer natural join droit_conge natural join nature_conge where lib_nature_conge='maternite'
+SELECT * FROM service START WITH iddad IS NULL or titre = 'direction' CONNECT BY iddad = PRIOR id ;
+SELECT level,titre,nom FROM service natural join employer START WITH iddad IS NULL or titre = 'direction' CONNECT BY iddad = PRIOR id order by level;
+select distinct level,(SELECT level as truelevel,titre,nom,prenom FROM service natural join employer where truelevel = level START WITH iddad IS NULL or titre = 'direction' CONNECT BY iddad = PRIOR id)
+FROM service natural join employer START WITH iddad IS NULL or titre = 'direction' CONNECT BY iddad = PRIOR id order by truelevel;
