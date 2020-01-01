@@ -1,0 +1,1 @@
+select * from eleve e where (select points from table (select resultat from eleve where num_personne = e.num_personne  ) where nom_cours = 'Analyse') >= 10;
